@@ -8,14 +8,8 @@
 
 ###### -Aca se pondra el contenido del programa.
 
-##Funciones
-`access`
-
-`chdir`
-
-`close`
-
-`closedir`
+##Functions used in this project
+`access`,`chdir`,`close`,`closedir`
 
 `execve`
 
@@ -89,5 +83,5 @@
 
 | pepito se va |
 | ------------ |
-|   pito viene |
+|   viene |
 |kmlasnlfna|
