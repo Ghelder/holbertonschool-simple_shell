@@ -1,0 +1,28 @@
+.TH HSH 1 "20 ABRIL 2023" "0.1" "simple_shell man page"
+.SH NAME
+simple_shell - command line interpreter
+.SH SYNOPSIS
+hsh [options] [file]
+.P
+.BI "int main(void)"
+.SH DESCRIPTION
+Shell is a UNIX term for the interactive user interface with an operating system
+.SH PATH
+It  will  look  inside  al  directions  in PATH env variable for exe‐
+cutable.
+.SH OPTIONS
+The  following are options that changes the normal simple shell envi‐
+ronment at booting.
+.SH EXAMPLE
+.SH SEE ALSO
+hsh(1);
+.SH BUGS
+No known bugs
+.SH AUTHOR
+Josue Cerron - Oscar Salinas - Alejandro Navarro - Helder Guevara
+.SH COMPILATION
+Your code will be compiled this way:
+.TS
+allbox;
+l.
+$ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
