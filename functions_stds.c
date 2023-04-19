@@ -1,10 +1,14 @@
 #include "main.h"
+
 /**
-  * _strcpy - funcion
-  * @dest: variable
-  * @src: variable
-  * Return: dest
-  */
+ * _strcpy - function to copy a string
+ * @dest: New string copied
+ * @src: The string to be copied
+ * Copy an string to another variable
+ *
+ * Return: Pointer to dest
+ *
+ */
 char *_strcpy(char *dest, char *src)
 {
 	int i = 0;
@@ -17,27 +21,33 @@ char *_strcpy(char *dest, char *src)
 	dest[i] = '\0';
 	return (dest);
 }
+
 /**
-  * _strlen - funcion
-  * @s: variable
-  * Return:nada
-  */
+ * _strlen - function to get the length
+ * @s: The string to be evaluated
+ * Swap values of two integers
+ *
+ * Return: Length of a string
+ *
+ */
 int _strlen(char *s)
 {
 	int i;
 
 	for (i = 0; *s != '\0'; s++)
-	{
 		i++;
-	}
 	return (i);
 }
+
 /**
-  * _strcat - funcion
-  * @dest: puntero 1
-  * @src: puntero 2
-  * Return: dest
-  */
+ * _strcat - function to concatenate
+ * @dest: The character to be evaluated
+ * @src: The character to be evaluated
+ * Concatenates two strings
+ *
+ * Return: Pointer to the resulting dest
+ *
+ */
 char *_strcat(char *dest, char *src)
 {
 	int d = 0;
