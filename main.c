@@ -15,8 +15,31 @@
  */
 int execute_program(char **args, char **argv, char **envp)
 {
-}
+	ssize_t rtn;
+	pid_t pid;
+	char *buff;
 
+	buff = malloc(sizeof(char) * 10);
+	if (!buff)
+		return (0);
+	pid = fork();
+
+	switch (pid)
+	{
+		case -1:
+			perror("Something went wrong with fork!");
+			return (0);
+		case 0:
+		rtn = execve(buff, args, envp);
+		if (rtn == -1)
+			printf("%s: No such file or directory\n", argv[0]);
+		free(buff);
+		break;
+	default:
+		wait(NULL);
+	}
+	return (1);
+}
 
 /**
  * tokenize - function to create tokens
@@ -28,6 +51,33 @@ int execute_program(char **args, char **argv, char **envp)
  */
 char **tokenize(char *str)
 {
+	char **grid;
+	char *token = NULL, *delim = " \t";
+	int i;
+
+	grid = malloc(sizeof(char *) * TOKENS_SIZE);
+	if (!grid)
+	{
+		perror("tokens failed\n");
+		return (NULL);
+	}
+	token = strtok(str, delim);
+	i = 0;
+	while (token)
+	{
+		grid[i] = malloc(sizeof(char *) * (_strlen(token) + 1));
+		if (!grid[i])
+		{
+			free(grid);
+			perror("token failed\n");
+			return (NULL);
+		}
+		_strcpy(grid[i], token);
+		token = strtok(NULL, delim);
+		i++;
+	}
+	grid[i] = NULL;
+	return (grid);
 }
 
 /**
@@ -70,13 +120,6 @@ int main(int argc, char **argv, char **envp)
 			}
 		}
 		*(s + _strlen(s) - 1) = '\0';
-		/**
-		 * if (strcmp(s, "exit") == 0)
-		 * {
-		 * free(s);
-		 * break;
-		 * }
-		 **/
 		args = tokenize(s);
 		run = execute_program(args, argv, envp);
 		for (j = 0; j < TOKENS_SIZE; j++)
