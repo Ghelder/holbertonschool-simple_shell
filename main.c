@@ -1,4 +1,5 @@
 #include "main.h"
+#include <fcntl.h>
 
 #define UNUSED(x) (void)(x)
 #define TOKENS_SIZE 10
@@ -15,29 +16,32 @@
  */
 int execute_program(char **args, char **argv, char **envp)
 {
-	ssize_t rtn;
 	pid_t pid;
-	char *buff;
+	ssize_t exe;
+	int status, fd;
 
-	buff = malloc(sizeof(char) * 10);
-	if (!buff)
-		return (0);
-	pid = fork();
-
-	switch (pid)
+	fd = open(args[0], O_RDONLY);
+	if (fd == -1)
 	{
-		case -1:
-			perror("Something went wrong with fork!");
-			return (0);
-		case 0:
-		rtn = execve(buff, args, envp);
-		if (rtn == -1)
-			printf("%s: No such file or directory\n", argv[0]);
-		free(buff);
-		break;
-	default:
-		wait(NULL);
+		printf("%s: No such file or directory\n", argv[0]);
+		close(fd);
+		return (1);
 	}
+	close(fd);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork failed!");
+		return (0);
+	}
+	if (pid == 0)
+	{
+		exe = execve(args[0], args, envp);
+		if (exe == -1)
+			perror("execve failed!\n");
+	}
+	else
+		wait(&status);
 	return (1);
 }
 
@@ -68,6 +72,11 @@ char **tokenize(char *str)
 		grid[i] = malloc(sizeof(char *) * (_strlen(token) + 1));
 		if (!grid[i])
 		{
+			while (i >= 0)
+			{
+				free(grid[i]);
+				i--;
+			}
 			free(grid);
 			perror("token failed\n");
 			return (NULL);
@@ -98,7 +107,6 @@ int main(int argc, char **argv, char **envp)
 	char *s = NULL, **args;
 
 	UNUSED(argc);
-	UNUSED(argv);
 
 	while (run)
 	{
@@ -119,6 +127,8 @@ int main(int argc, char **argv, char **envp)
 				break;
 			}
 		}
+		if (*s == '\n')
+			continue;
 		*(s + _strlen(s) - 1) = '\0';
 		args = tokenize(s);
 		run = execute_program(args, argv, envp);
