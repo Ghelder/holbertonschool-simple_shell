@@ -2,7 +2,6 @@
 #include <fcntl.h>
 
 #define UNUSED(x) (void)(x)
-#define TOKENS_SIZE 10
 
 /**
  * execute_program - function to execute the command
@@ -23,8 +22,9 @@ int execute_program(char **args, char **argv, char **envp)
 	fd = open(args[0], O_RDONLY);
 	if (fd == -1)
 	{
+		if (!args[0])
+			return (1);
 		printf("%s: No such file or directory\n", argv[0]);
-		close(fd);
 		return (1);
 	}
 	close(fd);
@@ -38,7 +38,10 @@ int execute_program(char **args, char **argv, char **envp)
 	{
 		exe = execve(args[0], args, envp);
 		if (exe == -1)
+		{
 			perror("execve failed!\n");
+			return (0);
+		}
 	}
 	else
 		wait(&status);
@@ -55,37 +58,34 @@ int execute_program(char **args, char **argv, char **envp)
  */
 char **tokenize(char *str)
 {
-	char **grid;
-	char *token = NULL, *delim = " \t";
-	int i;
+	char **grid, *cmd_cpy;
+	char *token = NULL, *delim = " \t\n";
+	int i = 0, argc = 0;
 
-	grid = malloc(sizeof(char *) * TOKENS_SIZE);
+	cmd_cpy = strdup(str);
+	token = strtok(cmd_cpy, delim);
+	while (token)
+	{
+		token = strtok(NULL, delim);
+		argc++;
+	}
+
+	grid = malloc(sizeof(char *) * argc);
 	if (!grid)
 	{
 		perror("tokens failed\n");
 		return (NULL);
 	}
+
 	token = strtok(str, delim);
-	i = 0;
 	while (token)
 	{
-		grid[i] = malloc(sizeof(char *) * (_strlen(token) + 1));
-		if (!grid[i])
-		{
-			while (i >= 0)
-			{
-				free(grid[i]);
-				i--;
-			}
-			free(grid);
-			perror("token failed\n");
-			return (NULL);
-		}
-		_strcpy(grid[i], token);
+		grid[i] = token;
 		token = strtok(NULL, delim);
 		i++;
 	}
 	grid[i] = NULL;
+	free(cmd_cpy);
 	return (grid);
 }
 
@@ -102,15 +102,17 @@ char **tokenize(char *str)
 int main(int argc, char **argv, char **envp)
 {
 	ssize_t chars;
-	int j, run = 1;
-	size_t size = 10;
+	int run = 1, fd_is_open;
+	size_t size = 0;
 	char *s = NULL, **args;
 
 	UNUSED(argc);
 
 	while (run)
 	{
-		printf("#cisfun$ ");
+		fd_is_open = isatty(STDIN_FILENO);
+		if (fd_is_open)
+			printf("#cisfun$ ");
 		chars = getline(&s, &size, stdin);
 		if (chars == -1)
 		{
@@ -118,23 +120,19 @@ int main(int argc, char **argv, char **envp)
 			{
 				putchar(10);
 				free(s);
-				break;
+				return (0);
 			}
 			else
 			{
 				perror("Something went wrong!\n");
 				free(s);
-				break;
+				return (0);
 			}
 		}
-		if (*s == '\n')
-			continue;
-		*(s + _strlen(s) - 1) = '\0';
 		args = tokenize(s);
 		run = execute_program(args, argv, envp);
-		for (j = 0; j < TOKENS_SIZE; j++)
-			free(args[j]);
 		free(args);
 	}
+	free(s);
 	return (0);
 }
