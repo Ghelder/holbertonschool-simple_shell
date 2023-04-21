@@ -1,7 +1,4 @@
 #include "main.h"
-#include <fcntl.h>
-
-#define UNUSED(x) (void)(x)
 
 /**
  * execute_program - function to execute the command
@@ -19,11 +16,11 @@ int execute_program(char **args, char **argv, char **envp)
 	ssize_t exe;
 	int status, fd;
 
+	if (!args)
+		return (1);
 	fd = open(args[0], O_RDONLY);
 	if (fd == -1)
 	{
-		if (!args[0])
-			return (1);
 		printf("%s: No such file or directory\n", argv[0]);
 		return (1);
 	}
@@ -58,33 +55,36 @@ int execute_program(char **args, char **argv, char **envp)
  */
 char **tokenize(char *str)
 {
-	char **grid, *cmd_cpy;
+	char **grid = NULL, *cmd_cpy;
 	char *token = NULL, *delim = " \t\n";
 	int i = 0, argc = 0;
 
 	cmd_cpy = strdup(str);
 	token = strtok(cmd_cpy, delim);
-	while (token)
+	if (token)
 	{
-		token = strtok(NULL, delim);
-		argc++;
-	}
+		while (token)
+		{
+			token = strtok(NULL, delim);
+			argc++;
+		}
 
-	grid = malloc(sizeof(char *) * (argc + 1));
-	if (!grid)
-	{
-		perror("tokens failed\n");
-		return (NULL);
-	}
+		grid = malloc(sizeof(char *) * (argc + 1));
+		if (!grid)
+		{
+			perror("tokens failed\n");
+			return (NULL);
+		}
 
-	token = strtok(str, delim);
-	while (token)
-	{
-		grid[i] = token;
-		token = strtok(NULL, delim);
-		i++;
+		token = strtok(str, delim);
+		while (token)
+		{
+			grid[i] = token;
+			token = strtok(NULL, delim);
+			i++;
+		}
+		grid[i] = NULL;
 	}
-	grid[i] = NULL;
 	free(cmd_cpy);
 	return (grid);
 }
