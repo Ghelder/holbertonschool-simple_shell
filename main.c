@@ -118,7 +118,6 @@ int main(int argc, char **argv, char **envp)
 		{
 			if (feof(stdin))
 			{
-				putchar(10);
 				free(s);
 				return (0);
 			}
