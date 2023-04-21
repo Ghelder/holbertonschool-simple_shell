@@ -70,7 +70,7 @@ char **tokenize(char *str)
 		argc++;
 	}
 
-	grid = malloc(sizeof(char *) * argc);
+	grid = malloc(sizeof(char *) * (argc + 1));
 	if (!grid)
 	{
 		perror("tokens failed\n");
