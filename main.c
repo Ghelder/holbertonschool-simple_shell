@@ -15,33 +15,42 @@ int execute_program(char **args, char **argv, char **envp)
 	pid_t pid;
 	ssize_t exe;
 	int status, fd;
+	char *path;
 
 	if (!args)
 		return (1);
-	fd = open(args[0], O_RDONLY);
-	if (fd == -1)
+	path = tokenizer_path(args, envp);
+	if (path == NULL)
 	{
 		printf("%s: No such file or directory\n", argv[0]);
+		return (1);
+	}
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		perror(path);
+		free(path);
 		return (1);
 	}
 	close(fd);
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork failed!");
+		free(path);
 		return (0);
 	}
 	if (pid == 0)
 	{
-		exe = execve(args[0], args, envp);
+		exe = execve(path, args, envp);
 		if (exe == -1)
 		{
-			perror("execve failed!\n");
+			free(path);
 			return (0);
 		}
 	}
 	else
 		wait(&status);
+	free(path);
 	return (1);
 }
 
