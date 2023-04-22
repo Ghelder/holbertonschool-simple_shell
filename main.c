@@ -1,6 +1,44 @@
 #include "main.h"
 
 /**
+ * check_cmd - function to execute the command
+ * @args: The array of tokens
+ * @argv: The array of arguments
+ * @envp: The variable environments
+ * @flag: The flag to check the use of malloc
+ * @path: The path to search a command
+ *
+ * Return: 0 on success, 1 otherwise
+ *
+ */
+int check_cmd(char **args, char **envp, char **argv, int *flag, char **path)
+{
+	int fd;
+
+	if (args[0][0] != '/' && args[0][0] != '.')
+	{
+		*path = tokenizer_path(args, envp);
+		if (*path == NULL)
+		{
+			printf("%s: No such file or directory\n", argv[0]);
+			return (1);
+		}
+		*flag = 1;
+	}
+	else
+	{
+		fd = open(args[0], O_RDONLY);
+		if (fd == -1)
+		{
+			printf("%s: No such file or directory\n", argv[0]);
+			return (1);
+		}
+		close(fd);
+		*path = args[0];
+	}
+	return (0);
+}
+/**
  * execute_program - function to execute the command
  * @args: The array of tokens
  * @argv: The array of arguments
@@ -14,29 +52,19 @@ int execute_program(char **args, char **argv, char **envp)
 {
 	pid_t pid;
 	ssize_t exe;
-	int status, fd;
+	int status, flag = 0, check;
 	char *path;
 
 	if (!args)
 		return (1);
-	path = tokenizer_path(args, envp);
-	if (path == NULL)
-	{
-		printf("%s: No such file or directory\n", argv[0]);
+	check = check_cmd(args, envp, argv, &flag, &path);
+	if (check)
 		return (1);
-	}
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-	{
-		perror(path);
-		free(path);
-		return (1);
-	}
-	close(fd);
 	pid = fork();
 	if (pid == -1)
 	{
-		free(path);
+		if (flag == 1)
+			free(path);
 		return (0);
 	}
 	if (pid == 0)
@@ -44,58 +72,18 @@ int execute_program(char **args, char **argv, char **envp)
 		exe = execve(path, args, envp);
 		if (exe == -1)
 		{
-			free(path);
+			if (flag == 1)
+				free(path);
 			return (0);
 		}
 	}
 	else
-		wait(&status);
-	free(path);
-	return (1);
-}
-
-/**
- * tokenize - function to create tokens
- * @str: The string to be splitted
- * Split a string in words
- *
- * Return: Pointer to the array of tokens
- *
- */
-char **tokenize(char *str)
-{
-	char **grid = NULL, *cmd_cpy;
-	char *token = NULL, *delim = " \t\n";
-	int i = 0, argc = 0;
-
-	cmd_cpy = strdup(str);
-	token = strtok(cmd_cpy, delim);
-	if (token)
 	{
-		while (token)
-		{
-			token = strtok(NULL, delim);
-			argc++;
-		}
-
-		grid = malloc(sizeof(char *) * (argc + 1));
-		if (!grid)
-		{
-			perror("tokens failed\n");
-			return (NULL);
-		}
-
-		token = strtok(str, delim);
-		while (token)
-		{
-			grid[i] = token;
-			token = strtok(NULL, delim);
-			i++;
-		}
-		grid[i] = NULL;
+		wait(&status);
+		if (flag == 1)
+			free(path);
 	}
-	free(cmd_cpy);
-	return (grid);
+	return (1);
 }
 
 /**
@@ -133,11 +121,10 @@ int main(int argc, char **argv, char **envp)
 			else
 			{
 				perror("Something went wrong!\n");
-				free(s);
 				return (0);
 			}
 		}
-		args = tokenize(s);
+		args = tokenizer_cmd(s);
 		run = execute_program(args, argv, envp);
 		free(args);
 	}
