@@ -28,7 +28,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 	{
 		if (flag == 1)
 			free(path);
-		exit(127);
+		return (0);
 	}
 	if (pid == 0)
 	{
@@ -45,7 +45,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 		if (flag == 1)
 			free(path);
 	}
-	if (!isatty(STDIN_FILENO) && exe == -1)
+	if (!isatty(STDIN_FILENO) && status > 0)
 		exit(2);
 	return (1);
 }
@@ -79,12 +79,12 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			if (feof(stdin))
 			{
 				free(s);
-				exit(EXIT_SUCCESS);
+				return (0);
 			}
 			else
 			{
 				perror("Something went wrong!\n");
-				exit(EXIT_FAILURE);
+				return (0);
 			}
 		}
 		if (strcmp(s, "exit\n") == 0)
