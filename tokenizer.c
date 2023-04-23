@@ -16,11 +16,10 @@ char *tokenizer_path(char **args, char **envp)
 	{
 		if (strncmp(envp[i], "PATH", 4) == 0)
 		{
-			while (envp[i][j])
+			for (; envp[i][j] != '\0'; j++)
 			{
 				if (envp[i][j] == '=')
 					break;
-				j++;
 			}
 			path = envp[i] + (j + 1);
 			break;

@@ -28,7 +28,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 	{
 		if (flag == 1)
 			free(path);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	if (pid == 0)
 	{
@@ -37,7 +37,6 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 		{
 			if (flag == 1)
 				free(path);
-			return (0);
 		}
 	}
 	else
@@ -45,8 +44,9 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 		wait(&status);
 		if (flag == 1)
 			free(path);
-		exit(2);
 	}
+	if (!isatty(STDIN_FILENO))
+		exit(2);
 	return (1);
 }
 

@@ -24,7 +24,9 @@ int check_cmd(char **args, char **envp, char **argv,
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
-			exit(127);
+			if (!isatty(STDIN_FILENO))
+				exit(127);
+			return (1);
 		}
 		*flag = 1;
 	}
@@ -35,7 +37,9 @@ int check_cmd(char **args, char **envp, char **argv,
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
-			exit(127);
+			if (!isatty(STDIN_FILENO))
+				exit(127);
+			return (1);
 		}
 		close(fd);
 		*path = args[0];
