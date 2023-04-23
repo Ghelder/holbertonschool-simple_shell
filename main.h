@@ -19,5 +19,5 @@ char *tokenizer_path(char **args, char **envp);
 char **tokenizer_cmd(char *);
 int check_env(char **envp);
 int check_cmd(char **args, char **envp, char **argv,
-		int *flag, char **path, int counter);
+		int *flag, char **path, int counter, char *);
 #endif

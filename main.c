@@ -6,12 +6,13 @@
  * @argv: The array of arguments
  * @envp: The variable environments
  * @counter: The counter for commands executed
+ * @str: The string got from getline
  * Search for a command and execute it if it was found
  *
  * Return: 1 on success, 0 otherwise
  *
  */
-int execute_program(char **args, char **argv, char **envp, int counter)
+int execute_program(char **args, char **argv, char **envp, int counter, char *str)
 {
 	pid_t pid;
 	ssize_t exe;
@@ -20,7 +21,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 
 	if (!args)
 		return (1);
-	check = check_cmd(args, envp, argv, &flag, &path, counter);
+	check = check_cmd(args, envp, argv, &flag, &path, counter, str);
 	if (check)
 		return (1);
 	pid = fork();
@@ -46,7 +47,11 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 			free(path);
 	}
 	if (!isatty(STDIN_FILENO) && status > 0)
+	{
+		free(args);
+		free(str);
 		exit(2);
+	}
 	return (1);
 }
 
@@ -97,7 +102,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 				break;
 		}
 		args = tokenizer_cmd(s);
-		run = execute_program(args, argv, envp, counter);
+		run = execute_program(args, argv, envp, counter, s);
 		free(args);
 	}
 	free(s);

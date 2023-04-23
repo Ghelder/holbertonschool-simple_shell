@@ -8,12 +8,13 @@
  * @flag: The flag to check the use of malloc
  * @path: The path to search a command
  * @counter: The counter for every command executed
+ * @str: The string got from getline
  *
  * Return: 0 on success, 1 otherwise
  *
  */
 int check_cmd(char **args, char **envp, char **argv,
-		int *flag, char **path, int counter)
+		int *flag, char **path, int counter, char *str)
 {
 	int fd;
 
@@ -25,7 +26,12 @@ int check_cmd(char **args, char **envp, char **argv,
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
 			if (!isatty(STDIN_FILENO))
+			{
+				free(*path);
+				free(args);
+				free(str);
 				exit(127);
+			}
 			return (1);
 		}
 		*flag = 1;
@@ -38,7 +44,13 @@ int check_cmd(char **args, char **envp, char **argv,
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
 			if (!isatty(STDIN_FILENO))
+			{
+				free(args);
+				free(*path);
+				free(str);
+				close(fd);
 				exit(127);
+			}
 			return (1);
 		}
 		close(fd);
