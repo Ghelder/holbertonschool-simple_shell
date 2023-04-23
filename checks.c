@@ -24,7 +24,7 @@ int check_cmd(char **args, char **envp, char **argv,
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
-			return (1);
+			exit(127);
 		}
 		*flag = 1;
 	}
@@ -35,7 +35,7 @@ int check_cmd(char **args, char **envp, char **argv,
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
 					argv[0], counter, args[0]);
-			return (1);
+			exit(127);
 		}
 		close(fd);
 		*path = args[0];
@@ -65,8 +65,6 @@ int check_env(char **envp)
 	{
 		printf("%s\n", *my_envp);
 		my_envp++;
-		if (strncmp(*my_envp, "_", 1) == 0)
-			break;
 	}
 	return (1);
 }

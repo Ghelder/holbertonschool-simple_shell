@@ -28,7 +28,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 	{
 		if (flag == 1)
 			free(path);
-		return (0);
+		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
 	{
@@ -45,6 +45,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 		wait(&status);
 		if (flag == 1)
 			free(path);
+		exit(2);
 	}
 	return (1);
 }
@@ -78,12 +79,12 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			if (feof(stdin))
 			{
 				free(s);
-				return (0);
+				exit(EXIT_SUCCESS);
 			}
 			else
 			{
 				perror("Something went wrong!\n");
-				return (0);
+				exit(EXIT_FAILURE);
 			}
 		}
 		if (strcmp(s, "exit\n") == 0)
