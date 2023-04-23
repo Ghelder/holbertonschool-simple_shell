@@ -25,7 +25,7 @@ char *tokenizer_path(char **args, char **envp)
 			break;
 		}
 	}
-	if (!path)
+	if (!path || !_strchr(path, ':'))
 		return (NULL);
 	copy_path = strdup(path);
 	token = strtok(copy_path, ":");
