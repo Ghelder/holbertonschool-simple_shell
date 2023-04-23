@@ -45,7 +45,7 @@ int execute_program(char **args, char **argv, char **envp, int counter)
 		if (flag == 1)
 			free(path);
 	}
-	if (!isatty(STDIN_FILENO))
+	if (!isatty(STDIN_FILENO) && exe == -1)
 		exit(2);
 	return (1);
 }
