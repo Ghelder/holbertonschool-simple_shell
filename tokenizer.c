@@ -10,13 +10,15 @@
 char *tokenizer_path(char **args, char **envp)
 {
 	char *path = NULL, *copy_path, *full_path = NULL, *token;
-	int fd, i, len;
+	int fd, i, len, j = 0;
 
 	for (i = 0; envp[i] != NULL; i++)
 	{
-		if (strncmp(envp[i], "PATH=", 5) == 0)
+		if (strncmp(envp[i], "PATH", 4) == 0)
 		{
-			path = envp[i] + 5;
+			while (envp[i][j] != '=')
+				j++;
+			path = envp[i] + (j + 1);
 			break;
 		}
 	}
