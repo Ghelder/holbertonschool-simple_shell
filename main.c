@@ -1,54 +1,17 @@
 #include "main.h"
 
 /**
- * check_cmd - function to execute the command
- * @args: The array of tokens
- * @argv: The array of arguments
- * @envp: The variable environments
- * @flag: The flag to check the use of malloc
- * @path: The path to search a command
- *
- * Return: 0 on success, 1 otherwise
- *
- */
-int check_cmd(char **args, char **envp, char **argv, int *flag, char **path)
-{
-	int fd;
-
-	if (args[0][0] != '/' && args[0][0] != '.')
-	{
-		*path = tokenizer_path(args, envp);
-		if (*path == NULL)
-		{
-			printf("%s: No such file or directory\n", argv[0]);
-			return (1);
-		}
-		*flag = 1;
-	}
-	else
-	{
-		fd = open(args[0], O_RDONLY);
-		if (fd == -1)
-		{
-			printf("%s: No such file or directory\n", argv[0]);
-			return (1);
-		}
-		close(fd);
-		*path = args[0];
-	}
-	return (0);
-}
-/**
  * execute_program - function to execute the command
  * @args: The array of tokens
  * @argv: The array of arguments
  * @envp: The variable environments
- * Split a string in words
+ * @counter: The counter for commands executed
+ * Search for a command and execute it if it was found
  *
- * Return: Pointer to the array of tokens
+ * Return: 1 on success, 0 otherwise
  *
  */
-int execute_program(char **args, char **argv, char **envp)
+int execute_program(char **args, char **argv, char **envp, int counter)
 {
 	pid_t pid;
 	ssize_t exe;
@@ -57,7 +20,7 @@ int execute_program(char **args, char **argv, char **envp)
 
 	if (!args)
 		return (1);
-	check = check_cmd(args, envp, argv, &flag, &path);
+	check = check_cmd(args, envp, argv, &flag, &path, counter);
 	if (check)
 		return (1);
 	pid = fork();
@@ -96,14 +59,12 @@ int execute_program(char **args, char **argv, char **envp)
  *
  * Return: 0 all success
  */
-int main(int argc, char **argv, char **envp)
+int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	ssize_t chars;
-	int run = 1, fd_is_open;
-	size_t size = 0;
+	int run = 1, fd_is_open, counter = 0;
+	size_t	size = 0;
 	char *s = NULL, **args;
-
-	UNUSED(argc);
 
 	while (run)
 	{
@@ -111,6 +72,7 @@ int main(int argc, char **argv, char **envp)
 		if (fd_is_open)
 			printf("#cisfun$ ");
 		chars = getline(&s, &size, stdin);
+		counter++;
 		if (chars == -1)
 		{
 			if (feof(stdin))
@@ -124,8 +86,17 @@ int main(int argc, char **argv, char **envp)
 				return (0);
 			}
 		}
+		if (strcmp(s, "exit\n") == 0)
+			break;
+		else if (strcmp(s, "env\n") == 0)
+		{
+			if (check_env(envp))
+				continue;
+			else
+				break;
+		}
 		args = tokenizer_cmd(s);
-		run = execute_program(args, argv, envp);
+		run = execute_program(args, argv, envp, counter);
 		free(args);
 	}
 	free(s);

@@ -9,7 +9,7 @@
   */
 char *tokenizer_path(char **args, char **envp)
 {
-	char *path, *copy_path, *full_path = NULL, *token;
+	char *path = NULL, *copy_path, *full_path = NULL, *token;
 	int fd, i, len;
 
 	for (i = 0; envp[i] != NULL; i++)
@@ -20,6 +20,8 @@ char *tokenizer_path(char **args, char **envp)
 			break;
 		}
 	}
+	if (!path)
+		return (NULL);
 	copy_path = strdup(path);
 	token = strtok(copy_path, ":");
 	while (token)
