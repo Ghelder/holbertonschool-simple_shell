@@ -1,87 +1,79 @@
-#C - Simple Shell
+# C - Simple Shell
 
-[TOCM]
+![](https://media.licdn.com/dms/image/C5612AQFpOkcCsn93wg/article-cover_image-shrink_600_2000/0/1618578265410?e=2147483647&v=beta&t=qT6ByTN7vsoPj3aKF6XNy3F4Oc46v6BK4HxCP4g2kXY)
 
-[TOC]
+## Table of Contents
 
-##Tabla de contenido
+- [Description](#description) 
+- [Flowchart](#flowchart) 
+- [Usage](#usage)
+- [Examples](#examples)
 
-###### -Aca se pondra el contenido del programa.
+## Description
 
-##Functions used in this project
-`access`,`chdir`,`close`,`closedir`
++ `hsh` is a basic shell made in C. It does execute simple commands with arguments such as `ls -la`, `pwd`, `cat`, etc. 
++ For this project we will use (some of) this functions and systems calls:
 
-`execve`
+### Function calls 
 
-`exit`
+`closedir` `exit` `fflush` `free` `getcwd` `getline` `getpid` `isatty` `kill` `malloc`  `opendir` `perror` `printf` `fprintf` `vfprintf` `sprintf` `putchar` `read` `readdir` `strtok`
 
-`_exit`
-
-`fflush`
-
-`fork`
-
-`free`
-
-`getcwd`
-
-`getline`
-
-`getpid`
-
-`isatty`
-
-`kill`
-
-`malloc`
-
-`open`
-
-`opendir`
-
-`perror`
-
-`printf`
-
-`fprintf`
-
-`vfprintf`
-
-`sprintf`
-
-`putchar`
-
-`read`
-
-`readdir`
-
-`signal`
-
-`stat`
-
-`lstat`
-
-`fstat`
-
-`strtok`
-
-`wait`
-
-`waitpid`
-
-`wait3`
-
-`wait4`
-
-`write`
-
-##Codigo
-######-Aca ba el codigo.
+### System calls
 
 
+| fork  |  access | chdir | close | exceve |
+| ------------ | ------------ | ------------ | ------------ | ------------ |
+| *_exit* | *getpid* | *open* | *signal* | *wait* |
+| *waitpid* | *wait3* | *wait4* | *write* | *read* |
 
+## Flowchart
 
-| pepito se va |
-| ------------ |
-|   viene |
-|kmlasnlfna|
+## Usage
+
+To use this function, 
++ first clone the repository:
+```bash
+git clone https://github.com/Ghelder/holbertonschool-simple_shell.git
+```
+ 
++ go into directory you've clone with `cd`: 
+```bash 
+cd ./holbertonschool-simple_shell/ 
+```
++ then compile the code with `gcc` and some flags: 
+```bash
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```
+
+## Examples
+
+### Interactive mode
++ To enter in interactive mode you have to execute the binary file `hsh` as shown is the image below:
+
+ ![](https://res.cloudinary.com/djvwjnzxw/image/upload/v1682350222/interactive_mode_pkyshj.png)
+
+ ![](https://i.ibb.co/hmq6Nk8/ls-2.png)
+
+### Non-interactive mode
+
+```bash
+echo "/bin/ls" | ./hsh
+```
+```bash
+echo "pwd" | ./hsh
+```
+```bash
+echo "ls -la /tmp" | ./hsh
+```
+```bash
+cat "main.h" | ./hsh
+```
+## Desription files
+
+| file | description |
+| ------------ | ------------ |
+| *main.c* | The main function that runs our shell |
+| *main.h* | All prototypes and includes|
+| *tokenizer.c* | Make our input and path into tokens to work with |
+| *functions_stds.c* | Support functions to use in other functions |
+| *checks.c* | Validate if a command exists |
