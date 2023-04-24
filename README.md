@@ -28,6 +28,8 @@
 
 ## Flowchart
 
+![](https://i.ibb.co/ZSFkx9W/flowchart.jpg)
+
 ## Usage
 
 To use this function, 
@@ -66,7 +68,7 @@ echo "pwd" | ./hsh
 echo "ls -la /tmp" | ./hsh
 ```
 ```bash
-cat "main.h" | ./hsh
+echo "env" | ./hsh
 ```
 ## Desription files
 
