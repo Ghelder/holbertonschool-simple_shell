@@ -1,23 +1,45 @@
-.TH HSH 1 "20 ABRIL 2023" "0.1" "simple_shell man page"
+.TH HSH 1 "20 ABRIL 2023" "1.0" "hsh"
 .SH NAME
-simple_shell - command line interpreter
+hsh - command line interpreter
 .SH SYNOPSIS
-hsh [options] [file]
+non interactive mode - echo "ls" | ./hsh
 .P
-.BI "int main(void)"
+interactive mode - ./hsh
+.P
 .SH DESCRIPTION
-Shell is a UNIX term for the interactive user interface with an operating system
-.SH PATH
-It  will  look  inside  al  directions  in PATH env variable for exe‐
-cutable.
-.SH OPTIONS
-The  following are options that changes the normal simple shell envi‐
-ronment at booting.
+\fIhsh\fR 
+is a simple command line interpreter that takes input from the standard input (user's keyboard usually) or from  a file.
+hsh only support limited commands such as ls, pwd, env with arguments. Advance features are not implemented but we will.
+.P
+When you type a command it will look inside all directories in PATH env variable for executables.
+.SH ARGUMENTS
+You can use hsh in interactive mode with arguments, all arguments allowed by the executable. In the EXAMPLE section you will see how to do it. 
+.SH INVOCATIONS
+We can use the hsh in two modes, interactive and non-interactive mode. To use hsh in interactive you just need to type ./hsh and then hit enter. For non-interactive mode you can use it with the echo command and a pipe. You will see examples of them below.
 .SH EXAMPLE
+interactive mode (#cisfun$ this is the prompt of hsh)
+.P
+.BI "#cisfun$ ls -l /tmp"
+.P
+.BI "#cisfun$ which pwd"
+.P
+.BI "#cisfun$ service --status-all"
+.P
+.BI "#cisfun$ man bash"
+.P
+non interactive mode
+.P
+.BI "echo '/bin/ls' | ./hsh"
+.P
+.BI "echo 'env' | ./hsh"
+.P
+.BI "cat test_ls | ./hsh"
+.P
+where test_ls contains a list of commands
 .SH SEE ALSO
-hsh(1);
+bash(1);
 .SH BUGS
-No known bugs
+A bug was found in the interactive mode when you try to move the cursor up, down, left or right and hit enter. An undefined behavior happens, but you can 'fix it' with clear command. 
 .SH AUTHOR
 Josue Cerron - Oscar Salinas - Alejandro Navarro - Helder Guevara
 .SH COMPILATION
