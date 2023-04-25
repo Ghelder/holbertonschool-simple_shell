@@ -79,3 +79,9 @@ echo "env" | ./hsh
 | *tokenizer.c* | Make our input and path into tokens to work with |
 | *functions_stds.c* | Support functions to use in other functions |
 | *checks.c* | Validate if a command exists |
+
+## Contributors
++ Josue Cerrón [@xiayudev](https://github.com/xiayudev)
++ Oscar Salinas [@oscarsa3](https://github.com/Oscarsa3)
++ Helder Guevara [@Ghelder](https://github.com/Ghelder)
++ Alejandro Navarro [@Royalito](https://github.com/Royalito)
