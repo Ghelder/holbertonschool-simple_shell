@@ -30,6 +30,10 @@
 
 ![](https://i.ibb.co/ZSFkx9W/flowchart.jpg)
 
+## Requirements
+To compile hsh you need to intall these tools:
++ `gcc` - For Linux check [this](https://gcc.gnu.org/install/) and for windows check [this](https://www.digitalocean.com/community/tutorials/c-compiler-windows-gcc) 
+
 ## Usage
 
 To use this function, 
