@@ -5,20 +5,23 @@
 ## Table of Contents
 
 - [Description](#description) 
-- [Flowchart](#flowchart) 
+- [Flowchart](#flowchart)
+- [Requirements](#requirements)
 - [Usage](#usage)
 - [Examples](#examples)
+- [Description files](#description-files)
+- [Contributors](#contributors)
 
 ## Description
 
 + `hsh` is a basic shell made in C. It does execute simple commands with arguments such as `ls -la`, `pwd`, `cat`, etc. 
 + For this project we will use (some of) this functions and systems calls:
 
-### Function calls 
+### *Function calls*
 
 `closedir` `exit` `fflush` `free` `getcwd` `getline` `getpid` `isatty` `kill` `malloc`  `opendir` `perror` `printf` `fprintf` `vfprintf` `sprintf` `putchar` `read` `readdir` `strtok`
 
-### System calls
+### *System calls*
 
 
 | fork  |  access | chdir | close | exceve |
@@ -53,14 +56,14 @@ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
 ## Examples
 
-### Interactive mode
+### *Interactive mode*
 + To enter in interactive mode you have to execute the binary file `hsh` as shown is the image below:
 
  ![](https://res.cloudinary.com/djvwjnzxw/image/upload/v1682350222/interactive_mode_pkyshj.png)
 
  ![](https://i.ibb.co/hmq6Nk8/ls-2.png)
 
-### Non-interactive mode
+### *Non-interactive mode*
 
 ```bash
 echo "/bin/ls" | ./hsh
@@ -74,7 +77,7 @@ echo "ls -la /tmp" | ./hsh
 ```bash
 echo "env" | ./hsh
 ```
-## Desription files
+## Description files
 
 | file | description |
 | ------------ | ------------ |
