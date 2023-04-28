@@ -24,8 +24,8 @@ int check_cmd(char **args, char **envp, char **argv,
 		if (*path == NULL)
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
-					argv[0], counter, args[0]);
-			if (!isatty(STDIN_FILENO))
+					argv[0], counter, argc[0]);
+			if (!isatty(STDIN_FILENO))/* Check if fildes is open */
 			{
 				free(*path);
 				free(args);
@@ -34,7 +34,7 @@ int check_cmd(char **args, char **envp, char **argv,
 			}
 			return (1);
 		}
-		*flag = 1;
+		*flag = 1; /* To know if we are using malloc in path variable */
 	}
 	else
 	{
@@ -48,7 +48,6 @@ int check_cmd(char **args, char **envp, char **argv,
 				free(args);
 				free(*path);
 				free(str);
-				close(fd);
 				exit(127);
 			}
 			return (1);
@@ -77,6 +76,7 @@ int check_env(char **envp)
 		return (0);
 	}
 	my_envp = envp;
+	/* Print every environment variable */
 	while (*my_envp)
 	{
 		printf("%s\n", *my_envp);

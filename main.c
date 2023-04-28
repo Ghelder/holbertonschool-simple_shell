@@ -12,7 +12,8 @@
  * Return: 1 on success, 0 otherwise
  *
  */
-int execute_program(char **args, char **argv, char **envp, int counter, char *str)
+int execute_program(char **args, char **argv, char **envp,
+		int counter, char *str)
 {
 	pid_t pid;
 	ssize_t exe;
@@ -46,6 +47,7 @@ int execute_program(char **args, char **argv, char **envp, int counter, char *st
 		if (flag == 1)
 			free(path);
 	}
+	/* Check if fildes is open and execve fails*/
 	if (!isatty(STDIN_FILENO) && status > 0)
 	{
 		free(args);
@@ -68,20 +70,20 @@ int execute_program(char **args, char **argv, char **envp, int counter, char *st
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	ssize_t chars;
-	int run = 1, fd_is_open, counter = 0;
+	int run = 1, counter = 0;
 	size_t	size = 0;
 	char *s = NULL, **args;
 
 	while (run)
 	{
-		fd_is_open = isatty(STDIN_FILENO);
-		if (fd_is_open)
+		signal(SIGINT, signal_handler);
+		if (isatty(fd_is_open)) /* Checks if fildes is open */
 			printf("#cisfun$ ");
 		chars = getline(&s, &size, stdin);
 		counter++;
 		if (chars == -1)
 		{
-			if (feof(stdin))
+			if (feof(stdin))/* Checks if we hit Ctrl + D(eof)*/
 			{
 				free(s);
 				return (0);
