@@ -14,7 +14,9 @@
 
 ## Description
 
-+ `hsh` is a basic shell made in C. It does execute simple commands with arguments such as `ls -la`, `pwd`, `cat`, etc. 
++ `hsh` is a basic shell made in C. It does execute simple commands with options and arguments such as `ls -l`, `ls -la /tmp`, `pwd`, `cat`, etc.
++ What this shell does is split the input that you typed after the prompt into tokens, creating an array. Then it searches the first element of the array (it should be the command to execute) in the`PATH` environment variable. If the command was found, it is executed, otherwise a message is printed.
++ There are two modes of the shell, the *interactive mode* and the *non-interactive mode*. The interactive mode es when you directly execute the shell like this `./hsh` and you see the prompt. On the other hand, the non-interactive mode es when you make a pipe to execute a command. Examples of how this works are in the EXAMPLES section.
 + For this project we will use (some of) this functions and systems calls:
 
 ### *Function calls*
@@ -79,13 +81,14 @@ echo "env" | ./hsh
 ```
 ## Description files
 
-| file | description |
+| File | Description |
 | ------------ | ------------ |
 | *main.c* | The main function that runs our shell |
 | *main.h* | All prototypes and includes|
 | *tokenizer.c* | Make our input and path into tokens to work with |
 | *functions_stds.c* | Support functions to use in other functions |
 | *checks.c* | Validate if a command exists |
+| *function_helpers.c* | Support functions for the program |
 
 ## Contributors
 + Josue Cerrón [@xiayudev](https://github.com/xiayudev)
