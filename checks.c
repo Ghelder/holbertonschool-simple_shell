@@ -24,7 +24,7 @@ int check_cmd(char **args, char **envp, char **argv,
 		if (*path == NULL)
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n",
-					argv[0], counter, argc[0]);
+					argv[0], counter, args[0]);
 			if (!isatty(STDIN_FILENO))/* Check if fildes is open */
 			{
 				free(*path);

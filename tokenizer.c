@@ -79,6 +79,7 @@ char **tokenizer_cmd(char *str)
 		if (!grid)
 		{
 			perror("tokens failed\n");
+			free(cmd_cpy);
 			return (NULL);
 		}
 

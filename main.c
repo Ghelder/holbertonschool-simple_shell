@@ -72,12 +72,12 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	ssize_t chars;
 	int run = 1, counter = 0;
 	size_t	size = 0;
-	char *s = NULL, **args;
+	char *s = NULL, **args, *cmd;
 
 	while (run)
 	{
 		signal(SIGINT, signal_handler);
-		if (isatty(fd_is_open)) /* Checks if fildes is open */
+		if (isatty(STDIN_FILENO)) /* Checks if fildes is open */
 			printf("#cisfun$ ");
 		chars = getline(&s, &size, stdin);
 		counter++;
@@ -91,20 +91,37 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			else
 			{
 				perror("Something went wrong!\n");
+				free(s);
 				return (0);
 			}
 		}
-		if (strcmp(s, "exit\n") == 0)
+		cmd = trim_spaces(s);
+		if (strncmp(cmd, "help", 4) == 0)
+		{
+			help_builtin(cmd);
+			continue;
+		}
+		args = tokenizer_cmd(cmd);
+		if (strcmp(args[0], "exit") == 0)
+		{
+			free(args);
 			break;
-		else if (strcmp(s, "env\n") == 0)
+		}
+		else if (strcmp(args[0], "env") == 0)
 		{
 			if (check_env(envp))
+			{
+				free(args);
 				continue;
+			}
 			else
-				break;
+			{
+				fprintf(stderr, "%s: %d: %s: not found\n", argv[0], counter, "env");
+				free(args);
+				continue;
+			}
 		}
-		args = tokenizer_cmd(s);
-		run = execute_program(args, argv, envp, counter, s);
+		run = execute_program(args, argv, envp, counter, cmd);
 		free(args);
 	}
 	free(s);

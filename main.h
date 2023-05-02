@@ -22,4 +22,6 @@ int check_cmd(char **args, char **envp, char **argv,
 		int *flag, char **path, int counter, char *);
 char *_strchr(char *s, char c);
 void signal_handler(int);
+char *trim_spaces(char *);
+void help_builtin(char *);
 #endif
