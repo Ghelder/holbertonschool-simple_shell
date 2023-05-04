@@ -18,6 +18,7 @@ char *_strcpy(char *dest, char *src);
 char *tokenizer_path(char **args, char **envp);
 char **tokenizer_cmd(char *);
 int check_env(char **envp);
+int check_builtins(char **args, char **envp, int, char **argv);
 int check_cmd(char **args, char **envp, char **argv,
 		int *flag, char **path, int counter, char *);
 char *_strchr(char *s, char c);

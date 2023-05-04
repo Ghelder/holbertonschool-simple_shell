@@ -84,3 +84,39 @@ int check_env(char **envp)
 	}
 	return (1);
 }
+
+/**
+ * check_builtins - function to check builtins
+ * @args: The commands in tokens
+ * @envp: The variable environments
+ * @counter: The number fo commands executed
+ * @argv: The array of arguments passed to hsh
+ *
+ * Check for builtins commands
+ *
+ * Return: 1 on success, 0 otherwise
+ *
+ */
+int check_builtins(char **args, char **envp, int counter, char **argv)
+{
+	if (strcmp(args[0], "exit") == 0)
+	{
+		free(args);
+		return (0);
+	}
+	else if (strcmp(args[0], "env") == 0)
+	{
+		if (check_env(envp))
+		{
+			free(args);
+			return (1);
+		}
+		else
+		{
+			fprintf(stderr, "%s: %d: %s: not found\n", argv[0], counter, "env");
+			free(args);
+			return (1);
+		}
+	}
+	return (-1);
+}

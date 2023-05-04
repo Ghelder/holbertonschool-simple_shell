@@ -83,17 +83,8 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		counter++;
 		if (chars == -1)
 		{
-			if (feof(stdin))/* Checks if we hit Ctrl + D(eof)*/
-			{
-				free(s);
-				return (0);
-			}
-			else
-			{
-				perror("Something went wrong!\n");
-				free(s);
-				return (0);
-			}
+			free(s);
+			return (0);
 		}
 		cmd = trim_spaces(s);
 		if (strncmp(cmd, "help", 4) == 0)
@@ -102,25 +93,10 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			continue;
 		}
 		args = tokenizer_cmd(cmd);
-		if (strcmp(args[0], "exit") == 0)
-		{
-			free(args);
+		if (check_builtins(args, envp, counter, argv) == 1)
+			continue;
+		else if (check_builtins(args, envp, counter, argv) == 0)
 			break;
-		}
-		else if (strcmp(args[0], "env") == 0)
-		{
-			if (check_env(envp))
-			{
-				free(args);
-				continue;
-			}
-			else
-			{
-				fprintf(stderr, "%s: %d: %s: not found\n", argv[0], counter, "env");
-				free(args);
-				continue;
-			}
-		}
 		run = execute_program(args, argv, envp, counter, cmd);
 		free(args);
 	}
