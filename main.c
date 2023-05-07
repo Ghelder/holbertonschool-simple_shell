@@ -70,7 +70,7 @@ int execute_program(char **args, char **argv, char **envp,
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	ssize_t chars;
-	int run = 1, counter = 0;
+	int run = 1, counter = 0, rtn;
 	size_t	size = 0;
 	char *s = NULL, **args, *cmd;
 
@@ -93,12 +93,16 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			continue;
 		}
 		args = tokenizer_cmd(cmd);
-		if (check_builtins(args, envp, counter, argv) == 1)
-			continue;
-		else if (check_builtins(args, envp, counter, argv) == 0)
-			break;
-		run = execute_program(args, argv, envp, counter, cmd);
-		free(args);
+		if (args)
+		{
+			rtn = check_builtins(args, envp, counter, argv);
+			if (rtn == 1)
+				continue;
+			else if (rtn == 0)
+				break;
+			run = execute_program(args, argv, envp, counter, cmd);
+			free(args);
+		}
 	}
 	free(s);
 	return (0);

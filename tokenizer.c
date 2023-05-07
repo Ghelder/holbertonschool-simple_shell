@@ -74,7 +74,6 @@ char **tokenizer_cmd(char *str)
 			token = strtok(NULL, delim);
 			argc++;
 		}
-
 		grid = malloc(sizeof(char *) * (argc + 1));
 		if (!grid)
 		{
@@ -82,7 +81,6 @@ char **tokenizer_cmd(char *str)
 			free(cmd_cpy);
 			return (NULL);
 		}
-
 		token = strtok(str, delim);
 		/* Fill every token in the grid */
 		while (token)
@@ -97,4 +95,3 @@ char **tokenizer_cmd(char *str)
 	free(cmd_cpy);
 	return (grid);
 }
-

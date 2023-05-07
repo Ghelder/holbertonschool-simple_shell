@@ -113,7 +113,8 @@ int check_builtins(char **args, char **envp, int counter, char **argv)
 		}
 		else
 		{
-			fprintf(stderr, "%s: %d: %s: not found\n", argv[0], counter, "env");
+			fprintf(stderr, "%s: %d: %s: not found\n",
+					argv[0], counter, "env");
 			free(args);
 			return (1);
 		}
